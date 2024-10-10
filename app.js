@@ -52,7 +52,12 @@ app.use(flash());
  });
 
 //routes 
-app.use('/', routeHome);
-app.use('/login', routeLogin);
+app.use('/',routeHome);
+app.use('/login',routeLogin);
 
-// No need for app.listen() here
+
+//server starter
+const PORT = process.env.PORT || 1200;
+app.listen(PORT , ()=>{
+    console.log('server started on ',PORT);
+});
