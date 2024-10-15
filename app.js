@@ -6,6 +6,7 @@ import expressLayots from 'express-ejs-layouts';
 import mongoose from 'mongoose'; 
 import routeHome from './routes/home.js';
 import routeLogin from './routes/login.js';
+import routeDashboard from './routes/dashboard.js';
 import flash from 'connect-flash';
 import session from 'express-session';
 const app = express();
@@ -25,6 +26,7 @@ mongoose.connect(mongoUri)
 //ejs
 app.use(expressLayots);
 app.set('view engine','ejs');
+app.set('layout','layout');
 app.use(express.static('public'));
 
 //Body parse
@@ -33,8 +35,8 @@ app.use(express.urlencoded({extended:false}));
 //express session
 app.use(session({
   secret: 'secret',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false
 }));
 
 app.use(passport.initialize());
@@ -52,8 +54,10 @@ app.use(flash());
  });
 
 //routes 
+
 app.use('/',routeHome);
 app.use('/login',routeLogin);
+app.use('/dashboard',routeDashboard);
 
 
 //server starter
