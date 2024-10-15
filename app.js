@@ -36,7 +36,12 @@ app.use(express.urlencoded({extended:false}));
 app.use(session({
   secret: 'secret',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', 
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 
+}
 }));
 
 app.use(passport.initialize());
@@ -47,9 +52,9 @@ app.use(flash());
 
 //Global Variables
  app.use((req,res,next)=>{
-  res.locals.success_msg = req.flash('success_msg') || null;
-  res.locals.error_msg = req.flash('error_msg') || null;
-  res.locals.error = req.flash('error') || null;
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
   next();
  });
 
