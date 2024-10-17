@@ -8,6 +8,7 @@ import routeHome from './routes/home.js';
 import routeLogin from './routes/login.js';
 import routeDashboard from './routes/dashboard.js';
 import flash from 'connect-flash';
+import MongoStore from 'connect-mongo';
 import session from 'express-session';
 const app = express();
 import passport from 'passport';
@@ -32,17 +33,22 @@ app.use(express.static('public'));
 //Body parse
 app.use(express.urlencoded({extended:false}));
 
-//express session
-app.use(session({
-  secret: 'secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production', 
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 
-}
-}));
+
+
+app.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: mongoUri }), // Connect to MongoDB for sessions
+    cookie: {
+      secure: process.env.NODE_ENV === 'production', // Ensure it's true in production
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    },
+  })
+);
+
 
 app.use(passport.initialize());
 app.use(passport.session());
