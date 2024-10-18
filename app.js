@@ -42,7 +42,7 @@ app.use(
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: mongoUri }), // Connect to MongoDB for sessions
     cookie: {
-      secure: process.env.NODE_ENV === 'production', // Ensure it's true in production
+      secure: false, // Ensure it's true in production
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     },
