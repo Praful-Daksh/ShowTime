@@ -35,19 +35,12 @@ app.use(express.urlencoded({extended:false}));
 
 
 
-app.use(
-  session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: mongoUri }), // Connect to MongoDB for sessions
-    cookie: {
-      secure: false, // Ensure it's true in production
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    },
-  })
-);
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true,
+}));
+
 
 
 app.use(passport.initialize());
