@@ -47,13 +47,6 @@ app.use(session({
   }
 }));
 
-app.use((req, res, next) => {
-  console.log('Session:', req.session);
-  console.log('Flash messages:', req.flash());
-  next();
-});
-
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -69,11 +62,7 @@ app.use(flash());
   next();
  });
 
- import cors from 'cors';
-app.use(cors({
-  origin: 'https://your-frontend-domain.com', // Replace with your frontend domain
-  credentials: true, // Allow credentials (cookies)
-}));
+
 
 //routes 
 
