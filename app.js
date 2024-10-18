@@ -37,9 +37,21 @@ app.use(express.urlencoded({extended:false}));
 
 app.use(session({
   secret: 'secret',
-  resave: true,
-  saveUninitialized: true,
+  resave: false, // Prevents resaving the session if nothing changed
+  saveUninitialized: false, // Avoid creating sessions for unauthenticated users
+  store: MongoStore.create({ mongoUrl: mongoUri }), // Ensure sessions are stored in MongoDB
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', // Set to true only in production (HTTPS)
+    httpOnly: true, // Prevents client-side access to cookies
+    maxAge: 24 * 60 * 60 * 1000, // 1 day expiration
+  }
 }));
+
+app.use((req, res, next) => {
+  console.log('Session:', req.session);
+  console.log('Flash messages:', req.flash());
+  next();
+});
 
 
 
@@ -56,6 +68,12 @@ app.use(flash());
   res.locals.error = req.flash('error');
   next();
  });
+
+ import cors from 'cors';
+app.use(cors({
+  origin: 'https://your-frontend-domain.com', // Replace with your frontend domain
+  credentials: true, // Allow credentials (cookies)
+}));
 
 //routes 
 
